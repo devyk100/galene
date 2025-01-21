@@ -34,6 +34,8 @@ var StaticRoot string
 var Insecure bool
 
 func Serve(address string, dataDir string) error {
+	// CHANGE THE FUCKING CODE HERE
+	// Insecure = true
 	http.Handle("/", &fileHandler{http.Dir(StaticRoot)})
 	http.HandleFunc("/group/", groupHandler)
 	http.HandleFunc("/recordings",
@@ -504,11 +506,17 @@ func failAuthentication(w http.ResponseWriter, realm string) {
 
 var wsUpgrader = websocket.Upgrader{
 	HandshakeTimeout: 30 * time.Second,
+	CheckOrigin: func(r *http.Request) bool {
+		log.Println(r.RemoteAddr)
+		return true
+	},
 }
 
 var wsPublicUpgrader = websocket.Upgrader{
 	HandshakeTimeout: 30 * time.Second,
 	CheckOrigin: func(r *http.Request) bool {
+		log.Println(r.RemoteAddr)
+		// r.RequestURI
 		return true
 	},
 }
